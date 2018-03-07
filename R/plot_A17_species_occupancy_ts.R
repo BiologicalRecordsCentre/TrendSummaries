@@ -5,10 +5,12 @@ rm(list = ls()) # clear R
 ### source in the plotting function ###
 source("R/PlotOcc.r")
 
+# "^psi.fs\\[" is the psi.fs region by default, otherwise pick psi.fs.r_ENGLAND, psi.fs.r_SCOTLAND, psi.fs.r_GB, psi.fs.r_UK, etc...
+
 ### Add article 17 species data ###
 PlotOcc(indata = "../data/model_runs/",
         output_path = "../output/",
-        REGION_IN_Q = "psi.fs.r_GB",
+        REGION_IN_Q = "psi.fs.r_SCOTLAND",
         y_axis_choice = "variable",
         cluster_run = "jasmin",
         jasmin_min_year = 1970)

@@ -45,7 +45,6 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
     short_term_gr <- short_term_gr[!is.na(short_term_gr)]
     short_term_gr <- short_term_gr[!is.infinite(short_term_gr)]
     
-    
     temp_spp_res <- NULL
     temp_spp_res <- data.frame(spp_name, min_year, max_year, st_first, 
                                LT_trend = median(long_term_gr), 

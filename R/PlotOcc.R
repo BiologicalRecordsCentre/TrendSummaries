@@ -5,10 +5,17 @@ require(ggplot2)
 
 PlotOcc <- function(indata = "../data/model_runs/", 
                     output_path = "../output/", 
-                    REGION_IN_Q = "psi.fs.r_GB", 
+                    REGION_IN_Q = "^psi.fs\\[", 
                     y_axis_choice = "variable",
                     cluster_run = "jasmin",
                     jasmin_min_year = 1970){
+  
+  # what are we running, used for file names later #
+  if(REGION_IN_Q == "^psi.fs\\["){
+    region_run <- "full_psi_fs"
+  } else {
+    region_run <- REGION_IN_Q
+  }
   
   
   ### set up species list we want to loop though ###
@@ -100,11 +107,11 @@ PlotOcc <- function(indata = "../data/model_runs/",
         ylab("Occupancy") +
         xlab("Year") +
         scale_y_continuous(limits = c(0, 1)) +
-        ggtitle(paste(spp_name, " - ", REGION_IN_Q, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
+        ggtitle(paste(spp_name, " - ", region_run, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
       #theme(plot.title = element_text(lineheight = .8, face = "bold"), legend.position = 'bottom')
       #theme(legend.position = "none")
       
-      ggsave(paste(spp_name, "_", REGION_IN_Q, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 300)	
+      ggsave(paste(spp_name, "_", region_run, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 300)	
     }
     
     if (y_axis_choice == "variable"){
@@ -121,11 +128,11 @@ PlotOcc <- function(indata = "../data/model_runs/",
         ylab("Occupancy") +
         xlab("Year") +
         scale_y_continuous(limits = c(min(new_data$quant_025), max(new_data$quant_975))) +
-        ggtitle(paste(spp_name, " - ", REGION_IN_Q, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
+        ggtitle(paste(spp_name, " - ", region_run, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
       #theme(plot.title = element_text(lineheight = .8, face = "bold"), legend.position = 'bottom')
       #theme(legend.position = "none")
       
-      ggsave(paste(spp_name, "_", REGION_IN_Q, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 300)	
+      ggsave(paste(spp_name, "_", region_run, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 300)	
     }  
     
   }

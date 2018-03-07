@@ -2,7 +2,7 @@
 
 SampPost <- function(indata = "../data/model_runs/", 
                     output_path = "../data/sampled_posterior_1000/",
-                    REGION_IN_Q = "psi.fs.r_GB",
+                    REGION_IN_Q = "psi.fs",
                     sample_n = 1000){
   
   ### set up species list we want to loop though ###
