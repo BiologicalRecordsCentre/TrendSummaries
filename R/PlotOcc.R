@@ -7,7 +7,7 @@ PlotOcc <- function(indata = "../data/model_runs/",
                     output_path = "../output/", 
                     REGION_IN_Q = "^psi.fs\\[", 
                     y_axis_choice = "variable",
-                    cluster_run = "cirrus",
+                    cluster_run = "jasmin",
                     jasmin_min_year = 1970){
   
   # what are we running, used for file names later #
