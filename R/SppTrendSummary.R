@@ -12,12 +12,22 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
     (((last/first)^(1/nyr))-1)*100
   }
   
+  # load a name matching file 
+  name_match <- read.csv("../data/spmod.csv", header = TRUE)
+  
   final_summary <- NULL
   
   for (i in spp.list){
     temp_data <- NULL
     temp_data <- read.csv(paste(indata, i, sep = ""), header = TRUE)
+    
+    # change name to latin name #
     spp_name <- as.character(unique(temp_data$species))
+    
+    # save species name #
+    spp_name <- gsub(".rdata", "", spp_name)
+    spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
+    
     temp_data <- temp_data[,1:(ncol(temp_data)-2)]
     min_year <- as.numeric(gsub("year_", "", names(temp_data[1])))
     max_year <- as.numeric(gsub("year_", "", names(temp_data[ncol(temp_data)])))
@@ -47,17 +57,24 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
     
     temp_spp_res <- NULL
     temp_spp_res <- data.frame(spp_name, min_year, max_year, st_first, 
-                               LT_trend = median(long_term_gr), 
+                               median_LT_trend = median(long_term_gr),
+                               mean_LT_trend = mean(long_term_gr),
+                               LT_trend_precision = 1/(sd(long_term_gr)^2),
                                LT_trend_lower_2.5CI = quantile(long_term_gr, prob = 0.025), 
                                LT_trend_upper_97.5CI = quantile(long_term_gr, prob = 0.975),
                                LT_iterations_used = length(long_term_gr),
-                               ST_trend = median(short_term_gr),
+                               median_ST_trend = median(short_term_gr),
+                               mean_ST_trend = mean(short_term_gr), 
+                               ST_trend_precision = 1/(sd(short_term_gr)^2),
                                ST_trend_lower_2.5CI = quantile(short_term_gr, prob = 0.025), 
                                ST_trend_upper_97.5CI = quantile(short_term_gr, prob = 0.975),
                                ST_iterations_used = length(short_term_gr),
                                row.names = NULL)
     
     final_summary <- rbind(final_summary, temp_spp_res) # inefficient, change this later #
+    
+    ## add trend histogram ##
+    
   }
   
   # save the final summary data frame #

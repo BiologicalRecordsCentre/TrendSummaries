@@ -7,7 +7,7 @@ PlotOcc <- function(indata = "../data/model_runs/",
                     output_path = "../output/", 
                     REGION_IN_Q = "^psi.fs\\[", 
                     y_axis_choice = "variable",
-                    cluster_run = "jasmin",
+                    cluster_run = "cirrus",
                     jasmin_min_year = 1970){
   
   # what are we running, used for file names later #
@@ -17,6 +17,8 @@ PlotOcc <- function(indata = "../data/model_runs/",
     region_run <- REGION_IN_Q
   }
   
+  # load a name matching file 
+  name_match <- read.csv("../data/spmod.csv", header = TRUE)
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata) # species for which we have models
@@ -45,6 +47,11 @@ PlotOcc <- function(indata = "../data/model_runs/",
       spp_name <- gsub(".csv", "", i)
     }
     
+    if(cluster_run == "jasmin"){
+      spp_name <- substr(spp_name, 1, (regexpr("_it",spp_name)[1]-1))
+    }
+    
+    spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
     
     if (cluster_run == "cirrus"){
       out <- NULL
@@ -107,11 +114,11 @@ PlotOcc <- function(indata = "../data/model_runs/",
         ylab("Occupancy") +
         xlab("Year") +
         scale_y_continuous(limits = c(0, 1)) +
-        ggtitle(paste(spp_name, " - ", region_run, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
+        ggtitle(paste(spp_name)) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
       #theme(plot.title = element_text(lineheight = .8, face = "bold"), legend.position = 'bottom')
       #theme(legend.position = "none")
       
-      ggsave(paste(spp_name, "_", region_run, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 300)	
+      ggsave(paste(spp_name, "_", region_run, ".png", sep = ""), plot = last_plot(), path = output_path, width=7, height=5.5, units="in", dpi = 100)	
     }
     
     if (y_axis_choice == "variable"){
@@ -128,7 +135,7 @@ PlotOcc <- function(indata = "../data/model_runs/",
         ylab("Occupancy") +
         xlab("Year") +
         scale_y_continuous(limits = c(min(new_data$quant_025), max(new_data$quant_975))) +
-        ggtitle(paste(spp_name, " - ", region_run, sep = "")) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
+        ggtitle(paste(spp_name)) # , " - n = ",  no_recs[no_recs$spp == spp_name, "no_recs"], sep = "")) + # the latter half to add when we have records info per region
       #theme(plot.title = element_text(lineheight = .8, face = "bold"), legend.position = 'bottom')
       #theme(legend.position = "none")
       

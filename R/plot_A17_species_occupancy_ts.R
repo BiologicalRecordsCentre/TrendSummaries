@@ -10,7 +10,7 @@ source("R/PlotOcc.r")
 ### Add article 17 species data ###
 PlotOcc(indata = "../data/model_runs/",
         output_path = "../output/",
-        REGION_IN_Q = "psi.fs.r_SCOTLAND",
+        REGION_IN_Q = "^psi.fs\\[",
         y_axis_choice = "variable",
         cluster_run = "jasmin",
         jasmin_min_year = 1970)
