@@ -2,7 +2,8 @@
 
 SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/", 
                      output_path = "../trend_summary/",
-                     short_term_length = 10){
+                     short_term_length = 10,
+					           a_17 = "no"){
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata) # species for which we have models
@@ -13,7 +14,9 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
   }
   
   # load a name matching file 
-  name_match <- read.csv("../data/spmod.csv", header = TRUE)
+  if (a_17 == "yes"){
+	  name_match <- read.csv("../data/spmod.csv", header = TRUE)
+  }
   
   final_summary <- NULL
   
@@ -26,7 +29,10 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
     
     # save species name #
     spp_name <- gsub(".rdata", "", spp_name)
-    spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
+	  
+	  if (a_17 == "yes"){
+		  spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
+	  }
     
     temp_data <- temp_data[,1:(ncol(temp_data)-2)]
     min_year <- as.numeric(gsub("year_", "", names(temp_data[1])))
