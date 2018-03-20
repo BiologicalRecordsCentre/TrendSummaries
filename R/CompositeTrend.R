@@ -65,7 +65,7 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
   }
   
   if(save_iterations == "yes"){
-    write.csv(composite_trend, file = paste(output_path, group_name, "_composite_trend_iterations.csv", sep = "") , row.names = FALSE)
+    write.csv(composite_trend, file = paste(output_path, group_name, "_", trend_choice, "_composite_trend_iterations.csv", sep = "") , row.names = FALSE)
   }
     
   # save the summarised iterations #
@@ -79,6 +79,6 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     
   # add species number column #
   composite_trend_summary$spp_num <- number_of_spp
-  write.csv(composite_trend_summary, file = paste(output_path, group_name, "_composite_trend_summary.csv", sep = ""), row.names = FALSE)
+  write.csv(composite_trend_summary, file = paste(output_path, group_name, "_", trend_choice, "_composite_trend_summary.csv", sep = ""), row.names = FALSE)
   
 }
