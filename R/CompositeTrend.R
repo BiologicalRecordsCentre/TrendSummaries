@@ -13,13 +13,13 @@ cust_a_mean <-  function(x) mean(x, na.rm = T)
 # format should be as follows: dataframe - columns = years "X1980, X1981, Xn, spp, iteration
 # drop bad years and bad species prior to running this function
 
-PlotOcc <- function(samp_post = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2013_50_dropped_samp_post.rdata", 
+CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2013_50_dropped_samp_post.rdata", 
                     output_path = "outputs/",
                     trend_choice = "arithmetic_raw_occ",
                     group_name = "pollinators",
                     save_iterations = "yes"){
   
-  load(samp_post)
+  load(indata)
   
   number_of_spp <- length(unique(as.character(samp_post$spp))) # HOW MANY SPECIES GOING INTO THE INDICATOR? # 214 hoverflies # 139 bees
   
@@ -65,7 +65,7 @@ PlotOcc <- function(samp_post = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indic
   }
   
   if(save_iterations == "yes"){
-    write.csv(composite_trend, file = output_path, row.names = FALSE)
+    write.csv(composite_trend, file = paste(output_path, group_name, "composite_trend_iterations.csv", sep = "") , row.names = FALSE)
   }
     
   # save the summarised iterations #
@@ -77,5 +77,8 @@ PlotOcc <- function(samp_post = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indic
     upper_95_perc_CI_occ = apply(composite_trend, 2, quan_0.95)
   )
     
+  # add species number column #
+  composite_trend_summary$spp_num <- number_of_spp
+  write.csv(composite_trend_summary, file = paste(output_path, group_name, "composite_trend_summary.csv", sep = ""), row.names = FALSE)
   
 }
