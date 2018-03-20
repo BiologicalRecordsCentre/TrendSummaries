@@ -15,9 +15,10 @@ cust_a_mean <-  function(x) mean(x, na.rm = T)
 
 CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2013_50_dropped_samp_post.rdata", 
                     output_path = "outputs/",
-                    trend_choice = "arithmetic_raw_occ",
+                    trend_choice = "arithmetic_logit_occ",
                     group_name = "pollinators",
-                    save_iterations = "yes"){
+                    save_iterations = "yes",
+                    TrendScale = NULL){
   
   load(indata)
   
@@ -56,12 +57,18 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
       composite_trend_temp <- apply(logit_temp_table, 2, mean)
       composite_trend <- rbind(composite_trend, composite_trend_temp)
     }
-      
-    # geometric log odds (logit) occupancy back converted to odds scale with exp
-    if(trend_choice == "geometric_logit_occ"){
-      composite_trend_temp <- apply(logit_temp_table, 2, geomean)
-      composite_trend <- rbind(composite_trend, composite_trend_temp)
-    }
+    
+  }
+  
+  # if the trend is based on logit, back convert to odds (rather than occupancy) following Steve Freeman's advice #
+  if(trend_choice == "arithmetic_logit_occ"){
+    composite_trend <- exp(composite_trend)
+  }
+  
+  # scale to 100 for biodiversity indicators
+  if(!is.null(TrendScale)){
+    multiplier <- TrendScale/mean(composite_trend[,1])  # identify multiplier 
+    composite_trend <- composite_trend * multiplier # scale logit arithmetic mean so mean value in year 1 = 100 #
   }
   
   if(save_iterations == "yes"){
@@ -76,7 +83,7 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     lower_5_perc_CI_occ = apply(composite_trend, 2, quan_0.05),
     upper_95_perc_CI_occ = apply(composite_trend, 2, quan_0.95)
   )
-    
+  
   # add species number column #
   composite_trend_summary$spp_num <- number_of_spp
   write.csv(composite_trend_summary, file = paste(output_path, group_name, "_", trend_choice, "_composite_trend_summary.csv", sep = ""), row.names = FALSE)
