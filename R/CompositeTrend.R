@@ -8,17 +8,19 @@ quan_0.05 <- function(x) quantile(x, probs = 0.05, na.rm = TRUE)
 quan_0.95 <- function(x) quantile(x, probs = 0.95, na.rm = TRUE)
 quan_0.5 <- function(x) quantile(x, probs = 0.5, na.rm = TRUE)
 cust_a_mean <-  function(x) mean(x, na.rm = T)
+sem <- function(x) sd(x)/sqrt(length(x))
 
 # input data: the sampled 1000 iterations of the annual occupancy posterior distributions stacked across species
 # format should be as follows: dataframe - columns = years "X1980, X1981, Xn, spp, iteration
 # drop bad years and bad species prior to running this function
 
-CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2013_50_dropped_samp_post.rdata", 
+CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2016_50_dropped_samp_post.rdata", 
                     output_path = "outputs/",
                     trend_choice = "arithmetic_logit_occ",
-                    group_name = "pollinators",
+                    group_name = "pollinators_2016",
                     save_iterations = "yes",
-                    TrendScale = NULL){
+                    TrendScale = 100,
+                    plot_output = TRUE){
   
   load(indata)
   
@@ -81,11 +83,29 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     mean_occupancy = apply(composite_trend, 2, mean),
     median_occupancy = apply(composite_trend, 2, median),
     lower_5_perc_CI_occ = apply(composite_trend, 2, quan_0.05),
-    upper_95_perc_CI_occ = apply(composite_trend, 2, quan_0.95)
+    upper_95_perc_CI_occ = apply(composite_trend, 2, quan_0.95),
+    sd_occupancy = apply(composite_trend, 2, sd),
+    sem_occupancy = apply(composite_trend, 2, sem)
   )
   
   # add species number column #
   composite_trend_summary$spp_num <- number_of_spp
   write.csv(composite_trend_summary, file = paste(output_path, group_name, "_", trend_choice, "_composite_trend_summary.csv", sep = ""), row.names = FALSE)
+  
+  if(plot_output == TRUE){
+    
+    ggplot(composite_trend_summary, aes_string(x = "year", y = "mean_occupancy")) + 
+      theme_bw() +
+      geom_ribbon(data = composite_trend_summary, aes_string(group = 1, ymin = "lower_5_perc_CI_occ", ymax = "upper_95_perc_CI_occ"), alpha = 0.2) +
+      geom_line(size = 1, col = "black") +
+      geom_point(size = 2) +
+      geom_hline(yintercept = 100, linetype = "dashed") +
+      ylab("Index") +
+      xlab("Year") +
+      scale_y_continuous(limits = c(0, max(composite_trend_summary$upper_95_perc_CI_occ)))
+    
+    ggsave(paste(group_name, "_", trend_choice, "_composite_trend.png", sep = ""), plot = last_plot(), path = output_path, width=6, height=4, units="in", dpi = 300)	
+    
+  }
   
 }

@@ -45,6 +45,12 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
       nyr = max_year - min_year
     )
     
+    #long_term_gr <- annual_growth_rate(
+    #  first = temp_data[, "year_1970"],
+    #  last = temp_data[, "year_1997"],
+    #  nyr = max_year - min_year
+    #)
+    
     # estimate short-term annual growth rate #
     st_first <- max_year-short_term_length # extract first year for the 10 year trend
     
@@ -53,6 +59,12 @@ SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/",
       last = temp_data[,ncol(temp_data)],
       nyr = max_year - st_first
     )
+    
+    #short_term_gr <- annual_growth_rate(
+    #  first = temp_data[, "year_1987"],
+    #  last = temp_data[, "year_1997"],
+    #  nyr = max_year - st_first
+    #)
     
     # summarise across the iterations using median and 95% CI #
     # drop NaN, NA and infs #

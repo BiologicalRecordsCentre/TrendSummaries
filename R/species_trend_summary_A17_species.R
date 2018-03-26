@@ -9,4 +9,4 @@ source("R/SppTrendSummary.r")
 SppTrendSummary(indata = "../data/sampled_posterior_1000/", 
          output_path = "../trend_summary/",
          short_term_length = 10,
-		 a_17 = "yes")
+		     a_17 = "yes")
