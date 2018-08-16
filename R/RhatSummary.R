@@ -1,4 +1,21 @@
-###### Rhat summary ######
+#' RhatSummary - Rhat Summary function
+#' 
+#' @description This function extracts the rhat values for the annual 
+#' occupancy estimates for a set of species for a given region. The 
+#' function loops through Bugs output files within a given location.
+#'
+#' @param indata The file path to a location containing .rdata files
+#'      of the bugs outputs, one for each species
+#' @param output_path The location where the output will be saved.
+#' @param REGION_IN_Q The region for which the rhat values will be 
+#'      extracted. UK based occupancy model examples include,
+#'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENLGAND'.
+#' @param group_run The name of the group of species that were run.
+#'      This is simply used for naming the save file
+#'
+#' @return An .rdata file containing the rhat values for all species 
+#'      for all years for the region in question.
+#' @export
 
 RhatSummary <- function(indata = "../data/model_runs/", 
                      output_path = "../rhat_summary/",
