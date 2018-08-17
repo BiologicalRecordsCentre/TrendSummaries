@@ -1,32 +1,62 @@
-# add packages #
-require(ggplot2)
-require(reshape2)
-require(boot)
-geomean <- function(x){exp(mean(log(x)))}
+#' CompositeTrend function
+#' 
+#' @description This function can be used to produce composite metrics of change 
+#' (indicators), whilst propagating uncertainty in the individual 
+#' species trend estimates through to the final composite trend 
+#' metric. This function takes in a dataframe of sampled annual
+#' occupancy estimates across multiple species and returns a 
+#' a single composite trend metric with uncertainty. This approach
+#' is only suitable for species without missing years.
+#'
+#' @param indata The file path to an .rdata file containing a dataframe
+#'		  (called samp_post - GP to change this) which contains 
+#'		  year columns (prefixed with "X", e.g "X1985"), a species
+#'		  column ("spp"), and an iteration identifier ("iter"). The 
+#'		  year columns contain the annual occupancy estimates for 
+#' 		  the species-year-iteration combination in question.
+#' @param output_path The location where the outputs should be saved.
+#' @param trend_choice The approach used to combine the individual species 
+#'		  estimates into a single composite trend. See details.
+#' @param group_name The name of the species group we are running, used for
+#'  	  naming output files.
+#' @param save_iterations Do we want to save the composite trend estimates
+#'		  for each individual iteration, these are generally used for 
+#'		  estimating temporal trends with uncertainty.
+#' @param TrendScale Traditionally some indicators are scaled so the first 
+#'		  year is set to a given number, 100 in the case of the UK 
+#'		  biodiversity indicators. This value can be chosen here, with no
+#'		  scaling as the default.
+#' @param plot_output plot the resulting composite indicator: TRUE or FALSE.
+#' @details There are a number of model to choose from:
+#' \itemize{
+#'  \item{\code{"arithmetic_logit_occ"}}{ - The raw occupancy values are 
+#'  converted to the log odds scale (using the logit function). The
+#'  arithmetic mean across species is used to create a composite trend for each
+#'  iteration. These means are then converted back to the odds scale (exp).}
+#'  \item{\code{"geometric_raw_occ"}}{ - Take the geometric mean across species 
+#'  raw occupancy estimates }
+#'  \item{\code{"arithmetic_raw_occ"}}{ - potentially drop this, as not used.}
+#' }
+#' @return A summary file. This .csv is saved in the output_path location and 
+#' 		   contains the annual composite indicator estimate (summarized across 
+#' 		   the iterations as wither the mean or median). The unique number of 
+#' 		   species contributing to the indicator is shown in the "spp_num" column.
+#'		   Various forms of uncertainty (estimated across the iterations) for the 
+#'		   annual composite trend are presented, including the upper and lower 
+#'		   95% credible intervals, SD of the mean and standard error of the mean.
+#' @import ggplot2
+#' @import reshape2
+#' @import car
+#' @export
 
-quan_0.05 <- function(x) quantile(x, probs = 0.05, na.rm = TRUE)
-quan_0.95 <- function(x) quantile(x, probs = 0.95, na.rm = TRUE)
-quan_0.5 <- function(x) quantile(x, probs = 0.5, na.rm = TRUE)
-cust_a_mean <-  function(x) mean(x, na.rm = T)
-sem <- function(x) sd(x)/sqrt(length(x))
-
-# input data: the sampled 1000 iterations of the annual occupancy posterior distributions stacked across species
-# format should be as follows: dataframe - columns = years "X1980, X1981, Xn, spp, iteration
-# drop bad years and bad species prior to running this function
-
-CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/Indicator 2018/D1c pollinators/data/pollinators_1980_2016_50_dropped_samp_post.rdata", 
-                    output_path = "outputs/",
-                    trend_choice = "arithmetic_logit_occ",
-                    group_name = "pollinators_2016",
-                    save_iterations = "yes",
-                    TrendScale = 100,
-                    plot_output = TRUE){
+CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit_occ", group_name,
+                           save_iterations = "yes", TrendScale = NULL, plot_output = TRUE){
   
   load(indata)
   
-  number_of_spp <- length(unique(as.character(samp_post$spp))) # HOW MANY SPECIES GOING INTO THE INDICATOR? # 214 hoverflies # 139 bees
+  number_of_spp <- length(unique(as.character(samp_post$spp))) # How many species contribute to the indicator?
   
-  # loop through iterations - later convert to array and apply across array, should be quicker. #
+  # loop through iterations - later convert to array and apply across array, should be quicker #
   composite_trend <- NULL
   for (j in 1:length(unique(samp_post$iter))){
     print(j)
@@ -36,7 +66,7 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     
     # arithmean on the occ scale #
     logit_temp_table <- t_table
-    logit_temp_table <- as.data.frame(logit(as.matrix(logit_temp_table)))
+    logit_temp_table <- as.data.frame(car::logit(as.matrix(logit_temp_table)))
     
     # geomean on the occ scale #
     log_temp_table <- t_table
@@ -62,21 +92,21 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     
   }
   
-  # if the trend is based on logit, back convert to odds (rather than occupancy) following Steve Freeman's advice #
+  # if the trend is based on logit, back convert to odds (rather than occupancy) following Steve Freeman's comments #
   if(trend_choice == "arithmetic_logit_occ"){
     composite_trend <- exp(composite_trend)
   }
   
-  # scale to 100 for biodiversity indicators
+  # Are we scaling the indicator? - Scale to 100 for UK biodiversity indicators
   if(!is.null(TrendScale)){
     multiplier <- TrendScale/mean(composite_trend[,1])  # identify multiplier 
-    composite_trend <- composite_trend * multiplier # scale logit arithmetic mean so mean value in year 1 = 100 #
+    composite_trend <- composite_trend * multiplier # scale logit arithmetic mean so mean value in year 1 = the input value for TrendScale #
   }
   
   if(save_iterations == "yes"){
     write.csv(composite_trend, file = paste(output_path, group_name, "_", trend_choice, "_composite_trend_iterations.csv", sep = "") , row.names = FALSE)
   }
-    
+  
   # save the summarised iterations #
   composite_trend_summary <- data.frame(
     year = as.numeric(gsub("X", "", colnames(composite_trend))),
@@ -107,5 +137,5 @@ CompositeTrend <- function(indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Gary/I
     ggsave(paste(group_name, "_", trend_choice, "_composite_trend.png", sep = ""), plot = last_plot(), path = output_path, width=6, height=4, units="in", dpi = 300)	
     
   }
-  
+  return(composite_trend_summary)
 }
