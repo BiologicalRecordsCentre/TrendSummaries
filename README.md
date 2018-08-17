@@ -1,7 +1,7 @@
 # TrendSummaries
 
 ----------------
-A collection of scripts/functions designed to examine and visualise patterns and trends from occupancy models
+A collection of scripts/functions designed to examine and visualise patterns and trends from occupancy models. This package builds on the occupancy outputs of the [occDetFunc function](https://github.com/BiologicalRecordsCentre/sparta/blob/master/R/occDetFunc.r) from the [Sparta R package](https://github.com/BiologicalRecordsCentre/sparta "BRC sparta R package").
 
 ### Installation
 ----------------
