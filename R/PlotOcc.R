@@ -1,7 +1,25 @@
-###### Produce time-series plots of annual occupancy estimates ######
-
-# add packages #
-require(ggplot2)
+#' PlotOcc - Produce time-series plots of annual occupancy estimates
+#' 
+#' @description This function plots species-level annual occupancy time-series. The
+#' function plots all species within the input folder.  Currently had a hard coded name_
+#' match file that I will needs to remove
+#' 
+#' @param indata The folder containing the species-level occupancy model outputs
+#' @param output_path The location where the output plots will be saved.
+#' @param REGION_IN_Q The region for which the time-series that will be plotted.
+#'      UK based occupancy model examples include,
+#'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENGLAND'.
+#' @param y_axis_choice Two choices here, "variable" or "fixed". Fixed, fixes the 
+#'      y axis limits between 0 and 1. Variable sets the y axis limits equal to the 
+#'      maximum and minimum plotted values.
+#' @param cluster_run This is a UK specific parameter. "Jasmin" is used for outputs
+#'      from Jasmin occupancy model runs.  "Cirrus" is used for standard .rdata occupancy 
+#'      model outputs, such as those from the occDetFunc function from the R package Sparta.     
+#' @param jasmin_min_year If running on Jasmin outputs, the first year must be specified
+#'
+#' @return A .png file for each species containing time-series plots of annual occupancy.
+#' @import ggplot2    
+#' @export
 
 PlotOcc <- function(indata = "../data/model_runs/", 
                     output_path = "../output/", 
