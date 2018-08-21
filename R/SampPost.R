@@ -49,7 +49,7 @@ SampPost <- function(indata = "../data/model_runs/",
     }  
   }
   if(combined_output == TRUE){
-    save(samp_post, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""), row.names = FALSE)
+    save(samp_post, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
   }
 }
 
