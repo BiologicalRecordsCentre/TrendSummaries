@@ -1,0 +1,9 @@
+Package: TrendSummaries
+Title: TrendSummaries - summarising occupancy model outputs
+Version: 0.0.0.9000
+Authors@R: person("Gary", "Powney", email = "gawn@ceh.ac.uk", role = c("aut", "cre"))
+Description: A collection of scripts designed to examine and visualise patterns and trends from occupancy models
+Depends: R (>= 3.4.2)
+License: Open
+Encoding: UTF-8
+LazyData: true
