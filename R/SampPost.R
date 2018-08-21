@@ -28,7 +28,7 @@ SampPost <- function(indata = "../data/model_runs/",
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
-  combi_raw_occ <- NULL # create the stacked variable, will be used if combined_output is TRUE.
+  samp_post <- NULL # create the stacked variable, will be used if combined_output is TRUE.
   
   for (i in spp.list){
     print(i)
@@ -43,13 +43,13 @@ SampPost <- function(indata = "../data/model_runs/",
     
     if(combined_output == TRUE) {
       row.names(raw_occ) = NULL
-      combi_raw_occ <- rbind(combi_raw_occ, raw_occ)
+      samp_post <- rbind(samp_post, raw_occ)
     } else {
       write.csv(raw_occ, file = paste(output_path, gsub(".rdata", "" ,i), "_sample_", sample_n, "_post_", REGION_IN_Q, ".csv", sep = ""), row.names = FALSE)
     }  
   }
   if(combined_output == TRUE){
-    write.csv(combi_raw_occ, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".csv", sep = ""), row.names = FALSE)
+    save(samp_post, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""), row.names = FALSE)
   }
 }
 
