@@ -9,7 +9,7 @@
 #' @param output_path The location where the output will be saved.
 #' @param REGION_IN_Q The region for which occupancy estimates will be 
 #'      extracted. UK based occupancy model examples include,
-#'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENLGAND'.
+#'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENGLAND'.
 #' @param sample_n The number of values extracted from the posterior.
 #' @param combined_output This specifies whether the output should be a 
 #'      single .csv, containing all species (TRUE) or a single .csv file 
