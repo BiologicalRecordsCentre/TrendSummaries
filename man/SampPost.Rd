@@ -6,7 +6,7 @@
 \usage{
 SampPost(indata = "../data/model_runs/",
   output_path = "../data/sampled_posterior_1000/", REGION_IN_Q = "psi.fs",
-  sample_n = 1000)
+  sample_n = 1000, combined_output = TRUE)
 }
 \arguments{
 \item{indata}{The file path to a location containing .rdata files
@@ -16,9 +16,13 @@ of the bugs outputs, one for each species}
 
 \item{REGION_IN_Q}{The region for which occupancy estimates will be 
 extracted. UK based occupancy model examples include,
- 'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENLGAND'.}
+ 'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENGLAND'.}
 
 \item{sample_n}{The number of values extracted from the posterior.}
+
+\item{combined_output}{This specifies whether the output should be a 
+single .csv, containing all species (TRUE) or a single .csv file 
+per species (FALSE). Default is TRUE.}
 }
 \value{
 A .csv file for each species containing annual occupancy 
