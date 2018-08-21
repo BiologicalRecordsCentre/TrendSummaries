@@ -52,16 +52,25 @@
 CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit_occ", group_name,
                            save_iterations = "yes", TrendScale = NULL, plot_output = TRUE){
   
+  # add small custom functions - bad practice doing this here, move to a seperate useful functions file
+  geomean <- function(x){exp(mean(log(x)))}
+  quan_0.05 <- function(x) quantile(x, probs = 0.05, na.rm = TRUE)
+  quan_0.95 <- function(x) quantile(x, probs = 0.95, na.rm = TRUE)
+  quan_0.5 <- function(x) quantile(x, probs = 0.5, na.rm = TRUE)
+  cust_a_mean <-  function(x) mean(x, na.rm = T)
+  sem <- function(x) sd(x)/sqrt(length(x))
+
+  # load data 
   load(indata)
   
-  number_of_spp <- length(unique(as.character(samp_post$spp))) # How many species contribute to the indicator?
+  number_of_spp <- length(unique(as.character(samp_post$species))) # How many species contribute to the indicator?
   
   # loop through iterations - later convert to array and apply across array, should be quicker #
   composite_trend <- NULL
-  for (j in 1:length(unique(samp_post$iter))){
+  for (j in 1:length(unique(samp_post$iteration))){
     print(j)
     temp_table <- NULL
-    temp_table <- samp_post[samp_post$iter == j,]
+    temp_table <- samp_post[samp_post$iteration == j,]
     t_table <- temp_table[,(1:(ncol(temp_table)-2))] # convert shape of the table
     
     # arithmean on the occ scale #
@@ -109,7 +118,7 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
   
   # save the summarised iterations #
   composite_trend_summary <- data.frame(
-    year = as.numeric(gsub("X", "", colnames(composite_trend))),
+    year = as.numeric(gsub("year_", "", colnames(composite_trend))),
     mean_occupancy = apply(composite_trend, 2, mean),
     median_occupancy = apply(composite_trend, 2, median),
     lower_5_perc_CI_occ = apply(composite_trend, 2, quan_0.05),
@@ -129,7 +138,7 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
       geom_ribbon(data = composite_trend_summary, aes_string(group = 1, ymin = "lower_5_perc_CI_occ", ymax = "upper_95_perc_CI_occ"), alpha = 0.2) +
       geom_line(size = 1, col = "black") +
       geom_point(size = 2) +
-      geom_hline(yintercept = 100, linetype = "dashed") +
+      #geom_hline(yintercept = 100, linetype = "dashed") +
       ylab("Index") +
       xlab("Year") +
       scale_y_continuous(limits = c(0, max(composite_trend_summary$upper_95_perc_CI_occ)))
