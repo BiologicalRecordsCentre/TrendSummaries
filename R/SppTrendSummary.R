@@ -1,4 +1,44 @@
-###### species trend summary ######
+#' SppTrendSummary - Species trend summary
+#' 
+#' @description This function extracts trends for individual species
+#' from occupancy model outputs. Data describing the uncertainty and 
+#' value of the trend estimates are also extracted. Trends are estimated 
+#' as the annual growth rate between two given years, for example for a 
+#' long-term trend, the function estiamtes annual growth rate between the 
+#' first and last year of the time series. This function will be updated 
+#' to allow the user to specify the exact years for which the trend is 
+#' calculated.
+#'
+#' @param indata The file path to an selection of .csv files (one per species)
+#'      containing sampled annual occupancy estiamtes from the posterior 
+#'      distribution. These data can be extract using the {"SampPost"} function.
+#' @param output_path The location where the outputs should be saved.
+#' @param short_term_length The number of years used for the short-term trend.
+#' @param a_17 Are these species "article 17 species? This has specific relevence
+#'      to UK biodiversity indicators and will eventually be removed from this 
+#'      package.
+#' @param include_rhat_check Loads in the {RhatSummary} output data to test if
+#'      occupancy estiamtes for the years of interest converged, if not this test
+#'      is failed.
+#' @param include_prec_check A simple test of whether the precision of the trend
+#'      estimate is less than 0.2, if so the fail criterion is true.
+#' @param REGION_IN_Q The region for which the trends will be extracted. UK based
+#'      occupancy model examples include,
+#'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENLGAND'.
+#' @param model_useable_columns Include a simple column that identifies if the
+#'      species failed either the precision or Rhat tests.
+#'		  
+#'		  
+#' @return A summary file (.csv) containing the individual trends for each species. 
+#'       Each row is a species. There are trends for the long-term (LT) and 
+#'       short-term trend (ST). As the function summarises the trends across a
+#'       given number of iterations (based on the SampPost, sample number), the
+#'       mean and median are used to produce the best guess of the true trend.
+#'       Uncertainty is represented by the 95% credible intervals, and the precision
+#'       of the trend estimate. Finally the number of samples used to produce the 
+#'       trend are displayed.
+#'       
+#' @export
 
 SppTrendSummary <- function(indata = "../data/sampled_posterior_1000/", 
                      output_path = "../trend_summary/",
