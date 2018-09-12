@@ -30,6 +30,7 @@ SampPost <- function(indata = "../data/model_runs/",
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
   samp_post <- NULL # create the stacked variable, will be used if combined_output is TRUE.
   
+  # loop through species
   for (i in spp.list){
     print(i)
     out <- NULL
