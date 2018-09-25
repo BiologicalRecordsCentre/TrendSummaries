@@ -18,9 +18,7 @@
 #'  
 #' @return A .csv file summarising the number of species included for each
 #' region from the cleaned dataset
-#' 
 #' @export
-#' 
 
 InputOccDataSummary <- function(indata = "data/model_runs/", 
                     output_path = "output/", 
@@ -88,6 +86,6 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   }
   
   write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""))
-  return(regional_data_summary)
+  #return(regional_data_summary)
   
 }
