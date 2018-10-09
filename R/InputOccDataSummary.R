@@ -93,9 +93,9 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
     
     ### extract the first and last record for each species ###
     if(species_year_summary == TRUE){
-      min_year <- data.frame(aggregate(.~CONCEPT, data=temp_taxa, min))
+      min_year <- data.frame(aggregate(.~CONCEPT, data=taxa_data[, c("CONCEPT","YEAR")], min))
       names(min_year)[2]<-"min_year"
-      max_year <- data.frame(aggregate(.~CONCEPT, data=temp_taxa, max))
+      max_year <- data.frame(aggregate(.~CONCEPT, data=taxa_data[, c("CONCEPT","YEAR")], max))
       names(max_year)[2]<-"max_year"
       min_max <- merge(min_year, max_year)
       spp_year_summary <- rbind(spp_year_summary, min_max)
