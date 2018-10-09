@@ -2,7 +2,9 @@
 #' 
 #' @description THIS FUNCTION IS STILL UNDER REVIEW - This function takes .rdata 
 #' files created by the Data_cleaning.function and calculates how many species 
-#' have records in each region follwoing the data cleaning process.
+#' have records in each region follwoing the data cleaning process. Furthermore, 
+#' this function can be used to extract the first and last year of data for each 
+#' species following the data cleaning process.
 #'
 #' @param indata The file path to a folder contain .rdata output files 
 #' from the Data_cleaning.function
@@ -15,6 +17,9 @@
 #' @param save_name the name of the file to be saved
 #' @param outhwaite_spp_clean Set to TRUE or FALSE. ONly include species included 
 #' in Outhwaite's data paper
+#' @param species_year_summary Do you want to save a file that extracts the year 
+#' of the first and last record for the each species. This is calculated post 
+#' occupancy model filtering, e.g. site with < X years dropped.
 #'  
 #' @return A .csv file summarising the number of species included for each
 #' region from the cleaned dataset
@@ -26,7 +31,8 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
                     minNyear = 2,
                     minNrecs = 50,
                     save_name = "cirrus",
-                    outhwaite_spp_clean = TRUE){
+                    outhwaite_spp_clean = TRUE,
+                    species_year_summary = TRUE){
   
   # for testing #
   # indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Charlie/1.c. New Model Rerun/1. Data/Cleaned Datasets/"
@@ -34,7 +40,7 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   
   file_list <- list.files(indata)[grep(".rdata", list.files(indata))] # create a list of cleaned .rdata files to loop through.
   
-  # TEMPORARY #
+  # TEMPORARY - drop moths as in a code breakingly different format - sort at a later date #
   file_list <- file_list[!file_list %in% c("Moths_2017_02_14_Cleaned_Data.rdata")]
   
   # How many species in each region
@@ -42,6 +48,7 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   cn_id[is.na(cn_id)] <- 0
   
   regional_data_summary <- NULL
+  spp_year_summary <- NULL
   
   # loop through cleaned group .rdata files.
   for (i in file_list){
@@ -84,9 +91,20 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
                                                                      WALES_spp_recs,
                                                                      NI_spp_recs))
     
+    ### extract the first and last record for each species ###
+    if(species_year_summary == TRUE){
+      min_year <- data.frame(aggregate(.~CONCEPT, data=temp_taxa, min))
+      names(min_year)[2]<-"min_year"
+      max_year <- data.frame(aggregate(.~CONCEPT, data=temp_taxa, max))
+      names(max_year)[2]<-"max_year"
+      min_max <- merge(min_year, max_year)
+      spp_year_summary <- rbind(spp_year_summary, min_max)
+    }
+    
   }
   
   write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""))
+  write.csv(species_year_summary, file = paste(output_path, save_name, "_species_year_summary.csv", sep = ""))
   #return(regional_data_summary)
   
 }
