@@ -103,6 +103,8 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
     
   }
   
+  names(species_year_summary)[1] <- "spp_name"
+  # save the files of interest #
   write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""))
   write.csv(species_year_summary, file = paste(output_path, save_name, "_species_year_summary.csv", sep = ""))
   #return(regional_data_summary)
