@@ -38,10 +38,10 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   # indata = "W:/PYWELL_SHARED/Pywell Projects/BRC/Charlie/1.c. New Model Rerun/1. Data/Cleaned Datasets/"
   # minNyear = 2
   
-  file_list <- list.files(indata)[grep(".rdata", list.files(indata))] # create a list of cleaned .rdata files to loop through.
+  file_list <- list.files(indata)[grep("Cleaned_Data.rdata", list.files(indata))] # create a list of cleaned .rdata files to loop through.
   
-  # TEMPORARY - drop moths as in a code breakingly different format - sort at a later date #
-  file_list <- file_list[!file_list %in% c("Moths_2017_02_14_Cleaned_Data.rdata")]
+  # TEMPORARY - drop moths as in a code breakingly different format - sort at a later date # Also drop taxa not in Charlie's paper #
+  file_list <- file_list[!file_list %in% c("Moths_2017_02_14_Cleaned_Data.rdata", "Fish_170809_Cleaned_Data.rdata", "HypogeanCrustacea_170809_Cleaned_Data.rdata")]
   
   # How many species in each region
   cn_id <- read.csv("data/sq1km_country_id_UKonly_bordercells_tosmallercountry.csv", header = TRUE)
@@ -98,15 +98,16 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
       max_year <- data.frame(aggregate(.~CONCEPT, data=taxa_data[, c("CONCEPT","YEAR")], max))
       names(max_year)[2]<-"max_year"
       min_max <- merge(min_year, max_year)
+      min_max$group <- group
       spp_year_summary <- rbind(spp_year_summary, min_max)
     }
     
   }
-  
-  names(species_year_summary)[1] <- "spp_name"
+
   # save the files of interest #
-  write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""))
-  write.csv(species_year_summary, file = paste(output_path, save_name, "_species_year_summary.csv", sep = ""))
+  names(spp_year_summary)[1] <- "spp_name"
+  write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""), row.names = FALSE)
+  write.csv(spp_year_summary, file = paste(output_path, save_name, "_species_year_summary.csv", sep = ""), row.names = FALSE)
   #return(regional_data_summary)
   
 }
