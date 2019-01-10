@@ -49,6 +49,7 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   
   regional_data_summary <- NULL
   spp_year_summary <- NULL
+  spp_rec_summary <- NULL
   
   # loop through cleaned group .rdata files.
   for (i in file_list){
@@ -102,12 +103,37 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
       spp_year_summary <- rbind(spp_year_summary, min_max)
     }
     
+    # create mini datasets for each region #
+    ENGLAND_taxa_data <- taxa_data[taxa_data$TO_GRIDREF %in% as.character(cn_id[cn_id$ENGLAND == 1, "SQ1_SQUARE"]),]
+    SCOTLAND_taxa_data <- taxa_data[taxa_data$TO_GRIDREF %in% as.character(cn_id[cn_id$SCOTLAND == 1, "SQ1_SQUARE"]),]
+    WALES_taxa_data <- taxa_data[taxa_data$TO_GRIDREF %in% as.character(cn_id[cn_id$WALES == 1, "SQ1_SQUARE"]),]
+    NI_taxa_data <- taxa_data[taxa_data$TO_GRIDREF %in% as.character(cn_id[cn_id$NORTHERN_IRELAND == 1, "SQ1_SQUARE"]),]
+    
+    # extract records per species per region #
+    ENGLAND_taxa_table <- data.frame(table(ENGLAND_taxa_data$CONCEPT))
+    names(ENGLAND_taxa_table) <- c("species", "ENGLAND_recs")
+    SCOTLAND_taxa_table <- data.frame(table(SCOTLAND_taxa_data$CONCEPT))
+    names(SCOTLAND_taxa_table) <- c("species", "SCOTLAND_recs")
+    WALES_taxa_table <- data.frame(table(WALES_taxa_data$CONCEPT))
+    names(WALES_taxa_table) <- c("species", "WALES_recs")
+    NI_taxa_table <- data.frame(table(NI_taxa_data$CONCEPT))
+    names(NI_taxa_table) <- c("species", "NI_recs")
+    
+    # join the species record counts per region into a single table
+    group_spp_rec_summary <- merge(ENGLAND_taxa_table, SCOTLAND_taxa_table)
+    group_spp_rec_summary <- merge(group_spp_rec_summary, WALES_taxa_table)
+    group_spp_rec_summary <- merge(group_spp_rec_summary, NI_taxa_table)
+    group_spp_rec_summary$group <- group
+    
+    spp_rec_summary <- rbind(spp_rec_summary, group_spp_rec_summary)
+  
   }
 
   # save the files of interest #
   names(spp_year_summary)[1] <- "spp_name"
   write.csv(regional_data_summary, file = paste(output_path, save_name, "_regional_data_summary.csv", sep = ""), row.names = FALSE)
   write.csv(spp_year_summary, file = paste(output_path, save_name, "_species_year_summary.csv", sep = ""), row.names = FALSE)
-  #return(regional_data_summary)
+  write.csv(spp_rec_summary, file = paste(output_path, save_name, "_spp_rec_summary.csv", sep = ""), row.names = FALSE)
   
+  #return(regional_data_summary)
 }
