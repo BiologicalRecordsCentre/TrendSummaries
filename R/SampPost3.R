@@ -20,14 +20,16 @@
 #'       name column.
 #' @export
 
-SampPost <- function(indata = "../data/model_runs/", 
-                    output_path = "../data/sampled_posterior_1000/",
-                    REGION_IN_Q = "psi.fs",
-                    sample_n = 1000,
-                    combined_output = TRUE){
+SampPost3 <- function(indata = "../data/model_runs/", 
+                      spp.list,
+                      output_path = "../data/sampled_posterior_1000/",
+                      REGION_IN_Q = "psi.fs",
+                      sample_n = 1000,
+                      combined_output = TRUE){
   
   ### set up species list we want to loop though ###
-  spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
+  #spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
+  
   samp_post <- NULL # create the stacked variable, will be used if combined_output is TRUE.
   
   # loop through species

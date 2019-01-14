@@ -20,16 +20,24 @@
 #'       name column.
 #' @export
 
-SampPost <- function(indata = "../data/model_runs/", 
-                    output_path = "../data/sampled_posterior_1000/",
-                    REGION_IN_Q = "psi.fs",
-                    sample_n = 1000,
-                    combined_output = TRUE){
+SampPost2 <- function(indata = "../data/model_runs/", 
+                     output_path = "../data/sampled_posterior_1000/",
+                     REGION_IN_Q = "psi.fs",
+                     years = minmaxyear,
+                     sample_n = 2,
+                     combined_output = TRUE){
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
-  samp_post <- NULL # create the stacked variable, will be used if combined_output is TRUE.
-  
+ 
+  # create empty dataframe of required size
+  samp_post <- data.frame(matrix(NA, 
+                                 nrow = length(spp.list) * sample_n, 
+                                 ncol = (minmaxyear["maxyear"] - minmaxyear["minyear"])+1))
+  colnames(samp_post) <- years["minyear"]:years["maxyear"]
+  samp_post$iteration <- rep(1:sample_n, length(spp.list))
+  samp_post$species <- rep(spp.list, rep(sample_n, length(spp.list)))
+
   # loop through species
   for (i in spp.list){
     print(i)
@@ -38,18 +46,16 @@ SampPost <- function(indata = "../data/model_runs/",
     load(paste(indata, i, sep = ""))
     raw_occ <- data.frame(out$BUGSoutput$sims.list[REGION_IN_Q])
     raw_occ <- raw_occ[sample(1:nrow(raw_occ), sample_n),]
-    colnames(raw_occ) <- paste("year_", out$min_year:out$max_year, sep = "")
-    raw_occ$iteration <- 1:sample_n
-    raw_occ$species <- i
-    
-    if(combined_output == TRUE) {
-      row.names(raw_occ) = NULL
-      samp_post <- rbind(samp_post, raw_occ)
-    } else {
+
+    # put output into samp_post dataframe
+    samp_post[samp_post$species == i, as.character(c(out$min_year:out$max_year))] <- raw_occ
+      
+    if(combined_output == FALSE) {
       write.csv(raw_occ, file = paste(output_path, gsub(".rdata", "" ,i), "_sample_", sample_n, "_post_", REGION_IN_Q, ".csv", sep = ""), row.names = FALSE)
     }  
   }
-  if(combined_output == TRUE){
+  if(combined_output == TRUE){ # can get rid of this line?
+    colnames(samp_post) <- c(paste('year_', years["minyear"]:years["maxyear"], sep = ''), 'iteration', 'species')
     save(samp_post, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
   }
 }
