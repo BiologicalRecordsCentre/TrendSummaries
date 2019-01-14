@@ -40,8 +40,8 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
   
   file_list <- list.files(indata)[grep("Cleaned_Data.rdata", list.files(indata))] # create a list of cleaned .rdata files to loop through.
   
-  # TEMPORARY - drop moths as in a code breakingly different format - sort at a later date # Also drop taxa not in Charlie's paper #
-  file_list <- file_list[!file_list %in% c("Moths_2017_02_14_Cleaned_Data.rdata", "Fish_170809_Cleaned_Data.rdata", "HypogeanCrustacea_170809_Cleaned_Data.rdata")]
+  # TEMPORARY - drop taxa not in Charlie's paper #
+  file_list <- file_list[!file_list %in% c("Fish_170809_Cleaned_Data.rdata", "HypogeanCrustacea_170809_Cleaned_Data.rdata")]
   
   # How many species in each region
   cn_id <- read.csv("data/sq1km_country_id_UKonly_bordercells_tosmallercountry.csv", header = TRUE)
@@ -57,6 +57,11 @@ InputOccDataSummary <- function(indata = "data/model_runs/",
     load(paste(indata, i, sep = ""))
     
     # drop sites with less than X (2 buy default) number of years of data
+    if(i == "Moths_2017_02_14_Cleaned_Data.rdata"){
+      names(taxa_data) <- gsub("SQ_1KM", "TO_GRIDREF", names(taxa_data))
+      taxa_data$YEAR <-as.numeric(format(taxa_data$TO_STARTDATE, "%Y")) # add year column to the moths data
+    }
+    
     visit_data <- unique(taxa_data[, c("TO_GRIDREF", "YEAR")]) # just take the visits (unique combination of sites and years)
     visit_data <- as.data.frame(table(visit_data$TO_GRIDREF)) # extract how many years of data per grid cell
     names(visit_data) <- c("TO_GRIDREF", "nyears") # sort column names
