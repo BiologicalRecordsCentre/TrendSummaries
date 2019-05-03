@@ -11,7 +11,7 @@
 #' @param indata The file path to an .rdata file containing a dataframe
 #'		  (called samp_post - GP to change this) which contains 
 #'		  year columns (prefixed with "X", e.g "X1985"), a species
-#'		  column ("spp"), and an iteration identifier ("iter"). The 
+#'		  column ("species"), and an iteration identifier ("iter"). The 
 #'		  year columns contain the annual occupancy estimates for 
 #' 		  the species-year-iteration combination in question.
 #' @param output_path The location where the outputs should be saved.
@@ -73,13 +73,9 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
     temp_table <- samp_post[samp_post$iteration == j,]
     t_table <- temp_table[,(1:(ncol(temp_table)-2))] # convert shape of the table
     
-    # arithmean on the occ scale #
-    logit_temp_table <- t_table
-    logit_temp_table <- as.data.frame(car::logit(as.matrix(logit_temp_table)))
-    
     # geomean on the occ scale #
-    log_temp_table <- t_table
-    log_temp_table <- log(log_temp_table)
+    #log_temp_table <- t_table
+    #log_temp_table <- log(log_temp_table)
     
     # geometric mean raw occupancy #
     if(trend_choice == "geometric_raw_occ"){
@@ -95,6 +91,8 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
     
     # arithmetic log odds (logit) occupancy back converted to occupancy scale with inv.logit
     if(trend_choice == "arithmetic_logit_occ"){
+      logit_temp_table <- t_table
+      logit_temp_table <- as.data.frame(car::logit(as.matrix(logit_temp_table)))
       composite_trend_temp <- apply(logit_temp_table, 2, mean)
       composite_trend <- rbind(composite_trend, composite_trend_temp)
     }
