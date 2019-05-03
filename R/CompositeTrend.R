@@ -93,7 +93,7 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
     if(trend_choice == "arithmetic_logit_occ"){
       logit_temp_table <- t_table
       logit_temp_table <- as.data.frame(car::logit(as.matrix(logit_temp_table)))
-      composite_trend_temp <- apply(logit_temp_table, 2, mean)
+      composite_trend_temp <- apply(logit_temp_table, 2, cust_a_mean)
       composite_trend <- rbind(composite_trend, composite_trend_temp)
     }
     
