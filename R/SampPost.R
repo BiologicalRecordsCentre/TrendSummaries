@@ -14,6 +14,8 @@
 #' @param combined_output This specifies whether the output should be a 
 #'      single .csv, containing all species (TRUE) or a single .csv file 
 #'      per species (FALSE). Default is TRUE.
+#' @param group_name The name of the species group we are running, used for
+#'  	  naming output files.
 #'
 #' @return A .csv file for each species containing annual occupancy 
 #'       estiamtes for each year as columns, and an iteration and species 
@@ -24,6 +26,7 @@ SampPost <- function(indata = "../data/model_runs/",
                     output_path = "../data/sampled_posterior_1000/",
                     REGION_IN_Q = "psi.fs",
                     sample_n = 1000,
+                    group_name = "",
                     combined_output = TRUE){
   
   ### set up species list we want to loop though ###
@@ -50,7 +53,7 @@ SampPost <- function(indata = "../data/model_runs/",
     }  
   }
   if(combined_output == TRUE){
-    save(samp_post, file = paste(output_path, "all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
+    save(samp_post, file = paste(output_path, group_name, "_all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
   }
 }
 
