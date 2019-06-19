@@ -63,6 +63,9 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
   # load data 
   load(indata)
   
+  names(samp_post) <- gsub("iter", "iteration", names(samp_post))
+  names(samp_post) <- gsub("spp", "species", names(samp_post))
+  
   number_of_spp <- length(unique(as.character(samp_post$species))) # How many species contribute to the indicator?
   
   # loop through iterations - later convert to array and apply across array, should be quicker #
@@ -85,7 +88,7 @@ CompositeTrend <- function(indata, output_path, trend_choice = "arithmetic_logit
     
     # arithmetic mean raw occupancy #
     if(trend_choice == "arithmetic_raw_occ"){
-      composite_trend_temp <- apply(t_table, 2, mean)
+      composite_trend_temp <- apply(t_table, 2, cust_a_mean)
       composite_trend <- rbind(composite_trend, composite_trend_temp)
     }
     
