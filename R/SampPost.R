@@ -1,8 +1,9 @@
 #' SampPost - Sample posterior function
 #' 
 #' @description This function is used to extract a number of annual 
-#' occupancy estimates from any given posterior. The function loops 
-#' through Bugs output files within a given location.
+#' occupancy estimates from any given posterior produced using the 
+#' \code{occDetFunc()} in the package sparta. The function loops 
+#' through BUGS output files within a given location. 
 #'
 #' @param indata The file path to a location containing .rdata files
 #'      of the bugs outputs, one for each species
@@ -11,15 +12,28 @@
 #'      extracted. UK based occupancy model examples include,
 #'		  'psi.fs', 'psi.fs.r_GB', 'psi.fs.r_ENGLAND'.
 #' @param sample_n The number of values extracted from the posterior.
-#' @param combined_output This specifies whether the output should be a 
-#'      single .csv, containing all species (TRUE) or a single .csv file 
-#'      per species (FALSE). Default is TRUE.
 #' @param group_name The name of the species group we are running, used for
 #'  	  naming output files.
+#' @param combined_output This specifies whether the output should be a 
+#'      single .csv, containing all species (TRUE) or a single .csv file 
+#'      per species (FALSE). Default is TRUE. If TRUE all outputs 
+#'      must have the same start and end year. To combine outputs run 
+#'      over different year ranges please use \code{SampBind()}.
+#' @param max_year_model The last year for which estimates are available
+#'      in the posterior. If this is available in the metadata (models
+#'      run using sparta >= 0.2.06) then it will be added automatically.
+#'       If this is not available then any input value for this argument
+#'       will be used or this will default to NULL.
+#' @param min_year_model The first year for which estimates are available
+#'      in the posterior. If this is available in the metadata (models
+#'      run using sparta >= 0.2.06) then it will be added automatically.
+#'       If this is not available then any input value for this argument
+#'       will be used or this will default to NULL.
 #'
 #' @return A .csv file for each species containing annual occupancy 
-#'       estiamtes for each year as columns, and an iteration and species 
-#'       name column.
+#'       estimates for each year as columns, and an iteration and species 
+#'       name column. If combined_output = TRUE the results are saved as
+#'       an rdata file instead.
 #' @export
 
 SampPost <- function(indata = "../data/model_runs/", 
@@ -27,7 +41,9 @@ SampPost <- function(indata = "../data/model_runs/",
                     REGION_IN_Q = "psi.fs",
                     sample_n = 1000,
                     group_name = "",
-                    combined_output = TRUE){
+                    combined_output = TRUE,
+                    max_year_model = NULL, 
+                    min_year_model = NULL){
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
@@ -53,6 +69,15 @@ SampPost <- function(indata = "../data/model_runs/",
     }  
   }
   if(combined_output == TRUE){
+    # add start and end year as attribute data
+    # note that as all regions are run for the same time span the overall max and min are used
+    if(!is.null(attributes(out)$max_year_model)){
+      attr(samp_post,'max_year_model') <- attributes(out)$max_year_model
+      attr(samp_post,'min_year_model') <- attributes(out)$min_year_model
+    }else{
+      attr(samp_post,'max_year_model') <- max_year_model
+      attr(samp_post,'min_year_model') <- min_year_model
+      }
     save(samp_post, file = paste(output_path, group_name, "_all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
   }
 }
