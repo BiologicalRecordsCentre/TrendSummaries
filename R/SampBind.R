@@ -16,7 +16,7 @@
 #'         a single dataframe.
 
 
-SampPost <- function(indata = "../data/model_runs/", innames = NULL,
+SampBind <- function(indata = "../data/model_runs/", innames = NULL,
                      output_path = "../data/bound_samples/",
                      group_name = ""){
   
@@ -26,13 +26,10 @@ SampPost <- function(indata = "../data/model_runs/", innames = NULL,
     inputs.list <- subset(inputs.list, inputs.list %in% innames)
   }
   
-  bind_post <- NULL # create the stacked variable
-  
   # get the size of the time span by looping through inputs
   max_yrs<-c()
   min_yrs<-c()
-  allrows <-0
-  
+
   for (i in 1:length(inputs.list)){
     Fnme <- inputs.list[i]
     samp_post <- NULL
@@ -40,7 +37,6 @@ SampPost <- function(indata = "../data/model_runs/", innames = NULL,
     cur_attr <- attributes(samp_post)
     max_yrs[i] <- cur_attr$max_year_model
     min_yrs[i] <- cur_attr$min_year_model
-    allrows <- allrows + nrow(samp_post)
   }
   
   ystart <- min(min_yrs)
