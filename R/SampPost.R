@@ -68,6 +68,10 @@ SampPost <- function(indata = "../data/model_runs/",
       write.csv(raw_occ, file = paste(output_path, gsub(".rdata", "" ,i), "_sample_", sample_n, "_post_", REGION_IN_Q, ".csv", sep = ""), row.names = FALSE)
     }  
   }
+  
+  # correct species names
+  samp_post$species <- gsub(".rdata", "" ,samp_post$species)
+  
   if(combined_output == TRUE){
     # add start and end year as attribute data
     # note that as all regions are run for the same time span the overall max and min are used
