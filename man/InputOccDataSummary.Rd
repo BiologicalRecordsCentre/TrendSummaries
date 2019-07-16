@@ -4,9 +4,10 @@
 \alias{InputOccDataSummary}
 \title{InputOccDataSummary}
 \usage{
-InputOccDataSummary(indata = "data/model_runs/", output_path = "output/",
-  minNyear = 2, minNrecs = 50, save_name = "cirrus",
-  outhwaite_spp_clean = TRUE)
+InputOccDataSummary(indata = "data/model_runs/",
+  output_path = "output/", minNyear = 2, minNrecs = 50,
+  save_name = "cirrus", outhwaite_spp_clean = TRUE,
+  species_year_summary = TRUE)
 }
 \arguments{
 \item{indata}{The file path to a folder contain .rdata output files 
@@ -25,6 +26,10 @@ species needs to be included in the final modelled dataset}
 
 \item{outhwaite_spp_clean}{Set to TRUE or FALSE. ONly include species included 
 in Outhwaite's data paper}
+
+\item{species_year_summary}{Do you want to save a file that extracts the year 
+of the first and last record for the each species. This is calculated post 
+occupancy model filtering, e.g. site with < X years dropped.}
 }
 \value{
 A .csv file summarising the number of species included for each
@@ -33,5 +38,7 @@ region from the cleaned dataset
 \description{
 THIS FUNCTION IS STILL UNDER REVIEW - This function takes .rdata 
 files created by the Data_cleaning.function and calculates how many species 
-have records in each region follwoing the data cleaning process.
+have records in each region follwoing the data cleaning process. Furthermore, 
+this function can be used to extract the first and last year of data for each 
+species following the data cleaning process.
 }

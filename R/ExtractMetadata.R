@@ -7,13 +7,31 @@
 #' @param indata The file path to a location containing .rdata files
 #'      of the bugs outputs, one for each species. These must have
 #'      been created with sparta version >= 0.2.06.
-#' @param regions A vector of region names for which metadata is require.
+#' @param regions A vector of region names for which metadata is require
+#'      (e.g. \code{c("region1","region2")}).
 #'      The default is NULL and will only return metadata for the whole
 #'      model.
 #'
 #' @return A dataframe containing the metadata for each species for which an
 #'         output was available.
-#'         
+#'     \itemize{
+#'       \item{Species - the name of the species as saved in the model output.}
+#'       \item{n_obs - the number of observations of the foacl species on which 
+#'        the model is based.}
+#'       \item{min_year_data - the year of the first observation of the focal
+#'        species.}
+#'       \item{max_year_data - the year of the last observation of the focal
+#'        species.}
+#'       \item{gap_start - number of consecutive years from the start of the
+#'        time series that have no observations of the focal species.}
+#'       \item{gap_end - number of consecutive years from the end of the
+#'        time series that have no observations of the focal species.}
+#'       \item{gap_middle - number of consecutive years in the middle (after
+#'         the first observation but before the last) of the time series
+#'         with no observations of the focal species.}}
+#' If regions are provided the same summary information is 
+#'      calculated for each region.
+#'      
 ExtractMetadata <- function(indata = "../data/model_runs/", 
                             regions = NULL){
   

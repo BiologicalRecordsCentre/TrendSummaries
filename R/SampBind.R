@@ -14,6 +14,7 @@
 #'  	  
 #' @return An .rdata file containing the inputted posterior samples combined into
 #'         a single dataframe.
+#' @export
 
 
 SampBind <- function(indata = "../data/model_runs/", innames = NULL,
