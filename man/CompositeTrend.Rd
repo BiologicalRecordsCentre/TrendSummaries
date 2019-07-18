@@ -4,15 +4,15 @@
 \alias{CompositeTrend}
 \title{CompositeTrend function}
 \usage{
-CompositeTrend(indata, output_path, trend_choice = "arithmetic_logit_occ",
-  group_name, save_iterations = "yes", TrendScale = NULL,
-  plot_output = TRUE)
+CompositeTrend(indata, output_path,
+  trend_choice = "arithmetic_logit_occ", group_name,
+  save_iterations = "yes", TrendScale = NULL, plot_output = TRUE)
 }
 \arguments{
 \item{indata}{The file path to an .rdata file containing a dataframe
 (called samp_post - GP to change this) which contains 
 year columns (prefixed with "X", e.g "X1985"), a species
-column ("spp"), and an iteration identifier ("iter"). The 
+column ("species"), and an iteration identifier ("iter"). The 
 year columns contain the annual occupancy estimates for 
     the species-year-iteration combination in question.}
 
