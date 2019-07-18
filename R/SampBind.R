@@ -15,6 +15,7 @@
 #' @return An .rdata file containing the inputted posterior samples combined into
 #'         a single dataframe.
 #' @export
+#' @importFrom plyr rbind.fill
 
 
 SampBind <- function(indata = "../data/model_runs/", innames = NULL,

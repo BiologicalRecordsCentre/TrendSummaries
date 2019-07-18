@@ -12,7 +12,7 @@
 #'      The default is NULL and will only return metadata for the whole
 #'      model.
 #'
-#' @return A dataframe containing the metadata for each species for which an
+#' @return A data frame containing the metadata for each species for which an
 #'         output was available.
 #'     \itemize{
 #'       \item{Species - the name of the species as saved in the model output.}
@@ -31,7 +31,9 @@
 #'         with no observations of the focal species.}}
 #' If regions are provided the same summary information is 
 #'      calculated for each region.
-#'      
+#' @export
+#' @importFrom plyr rbind.fill      
+
 ExtractMetadata <- function(indata = "../data/model_runs/", 
                             regions = NULL){
   

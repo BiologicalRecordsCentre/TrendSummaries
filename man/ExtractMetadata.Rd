@@ -17,7 +17,7 @@ The default is NULL and will only return metadata for the whole
 model.}
 }
 \value{
-A dataframe containing the metadata for each species for which an
+A data frame containing the metadata for each species for which an
         output was available.
     \itemize{
       \item{Species - the name of the species as saved in the model output.}
