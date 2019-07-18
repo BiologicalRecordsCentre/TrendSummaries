@@ -99,17 +99,17 @@ StackFilter <- function(indata,
     }
     # filter by gap start
     if(!is.null(maxStartGap)){
-      goodspecies <- droplevels(subset(metadata, metadata$gap_start >= maxStartGap))
+      goodspecies <- droplevels(subset(metadata, metadata$gap_start <= maxStartGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
     # filter by gap end
     if(!is.null(maxEndGap)){
-      goodspecies <- droplevels(subset(metadata, metadata$gap_end >= maxEndGap))
+      goodspecies <- droplevels(subset(metadata, metadata$gap_end <= maxEndGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
     # filter by gap middle
     if(!is.null(maxMiddleGap)){
-      goodspecies <- droplevels(subset(metadata, metadata$gap_middle >= maxMiddleGap))
+      goodspecies <- droplevels(subset(metadata, metadata$gap_middle <= maxMiddleGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
     
@@ -121,17 +121,17 @@ StackFilter <- function(indata,
     }
     # filter by gap start
     if(!is.null(maxStartGap)){
-      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_start_r_",region)] >= maxStartGap))
+      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_start_r_",region)] <= maxStartGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
     # filter by gap end
     if(!is.null(maxEndGap)){
-      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_end_r_",region)] >= maxEndGap))
+      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_end_r_",region)] <= maxEndGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
     # filter by gap middle
     if(!is.null(maxMiddleGap)){
-      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_middle_r_",region)] >= maxMiddleGap))
+      goodspecies <- droplevels(subset(metadata, metadata[,paste0("gap_middle_r_",region)] <= maxMiddleGap))
       stacked_samps <- droplevels(subset(stacked_samps, stacked_samps$species %in% goodspecies$Species))
     }
   }
@@ -146,7 +146,7 @@ StackFilter <- function(indata,
     
       # replace the early years where there were no records of the focal species with NA
         if(min_year_data > min_year_model) {
-        stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year", min_year_model:(min_year_data-1))] <- NA
+        stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year_", min_year_model:(min_year_data-1))] <- NA
         } 
       }
     }else{
@@ -156,7 +156,7 @@ StackFilter <- function(indata,
       
         # replace the early years where there were no records of the focal species with NA
         if(min_year_data > min_year_model) {
-          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year", min_year_model:(min_year_data-1))] <- NA
+          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year_", min_year_model:(min_year_data-1))] <- NA
         } 
       }
     }
@@ -172,7 +172,7 @@ StackFilter <- function(indata,
         
         # replace the later years where there were no records of the foacl species with NA
         if(max_year_data < max_year_model) {
-          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year", (max_year_data +1):max_year_model)] <- NA
+          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year_", (max_year_data +1):max_year_model)] <- NA
         }
       }
     }else{
@@ -182,7 +182,7 @@ StackFilter <- function(indata,
     
         # replace the later years where there were no records of the foacl species with NA
         if(max_year_data < max_year_model) {
-          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year", (max_year_data +1):max_year_model)] <- NA
+          stacked_samps[stacked_samps$species == i, names(stacked_samps) %in% paste0("year_", (max_year_data +1):max_year_model)] <- NA
         }
       }
     }

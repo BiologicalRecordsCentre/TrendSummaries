@@ -42,7 +42,8 @@ ExtractMetadata <- function(indata = "../data/model_runs/",
   
   # set up a dataframe
   templatedf <- data.frame(Species = as.character(), n_obs = as.numeric(), min_year_data = as.integer(),
-                           max_year_data = as.integer(), gap_start = as.integer(), gap_end = as.integer(),
+                           max_year_data = as.integer(), min_year_model = as.integer(),
+                           max_year_model = as.integer(), gap_start = as.integer(), gap_end = as.integer(),
                            gap_middle = as.integer())
   
   # adjust template if regional
@@ -66,6 +67,8 @@ ExtractMetadata <- function(indata = "../data/model_runs/",
                          n_obs = cur_attr$metadata$analysis$summary$n_obs,
                          min_year_data = cur_attr$metadata$analysis$summary$min_year_data,
                          max_year_data = cur_attr$metadata$analysis$summary$max_year_data,
+                         min_year_model = cur_attr$metadata$analysis$summary$min_year_model,
+                         max_year_model = cur_attr$metadata$analysis$summary$max_year_model,
                          gap_start = cur_attr$metadata$analysis$summary$gap_start,
                          gap_end = cur_attr$metadata$analysis$summary$gap_end,
                          gap_middle = cur_attr$metadata$analysis$summary$gap_middle)
