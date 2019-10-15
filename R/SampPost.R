@@ -75,7 +75,7 @@ SampPost <- function(indata = "../data/model_runs/",
   if(combined_output == TRUE){
     # add start and end year as attribute data
     # note that as all regions are run for the same time span the overall max and min are used
-    if(!is.null(attributes(out))){
+    if(!is.null(attributes(out)$max_year_model)){
       metadata_model <-attributes(out)
       attr(samp_post,'max_year_model') <- metadata_model$metadata$analysis$summary$max_year_model
       attr(samp_post,'min_year_model') <- metadata_model$metadata$analysis$summary$min_year_model
