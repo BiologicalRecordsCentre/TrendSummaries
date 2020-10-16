@@ -47,7 +47,7 @@ SampPost <- function(indata = "../data/model_runs/",
                     combined_output = TRUE,
                     max_year_model = NULL, 
                     min_year_model = NULL,
-                    write){
+                    write = FALSE){
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
