@@ -40,7 +40,8 @@
 #'@export
 #'
 
-StackFilter <- function(indata, 
+StackFilter <- function(input = "memory",
+                        indata, 
                         output_path,
                         group_name,
                         metadata,
@@ -54,8 +55,12 @@ StackFilter <- function(indata,
                         ClipFirst = FALSE,
                         ClipLast = FALSE){
   
-  # load the rdata
-  load(indata)
+  # load data
+  if (input == "file") {
+    load(indata)
+  } else {
+    stacked_samps <- indata
+  }
   
   # get the species list
   spp_list <- stacked_samps$species
@@ -187,5 +192,10 @@ StackFilter <- function(indata,
       }
     }
   }
-  save(stacked_samps, file = paste0(output_path, group_name, "stacked_Filter", ".rdata")) 
+  if (write == TRUE) {
+    save(stacked_samps, file = paste0(output_path, group_name, 
+                                      "stacked_Filter", ".rdata")) 
+  }
+  
+  return(stacked_samps) 
 }

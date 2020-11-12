@@ -29,6 +29,9 @@
 #'      run using sparta >= 0.2.06) then it will be added automatically.
 #'       If this is not available then any input value for this argument
 #'       will be used or this will default to NULL.
+#'       
+#'@param write Boolean. If write = TRUE and combine_outputs = TRUE then then the .rdata 
+#'       files are written to output_path.
 #'
 #' @return A .csv file for each species containing annual occupancy 
 #'       estimates for each year as columns, and an iteration and species 
@@ -43,7 +46,8 @@ SampPost <- function(indata = "../data/model_runs/",
                     group_name = "",
                     combined_output = TRUE,
                     max_year_model = NULL, 
-                    min_year_model = NULL){
+                    min_year_model = NULL,
+                    write = FALSE){
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata)[grepl(".rdata", list.files(indata))] # species for which we have models
@@ -82,8 +86,11 @@ SampPost <- function(indata = "../data/model_runs/",
     }else{
       attr(samp_post,'max_year_model') <- max_year_model
       attr(samp_post,'min_year_model') <- min_year_model
-      }
-    save(samp_post, file = paste(output_path, group_name, "_all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
+    }
+    if (write == TRUE) {
+      save(samp_post, file = paste(output_path, group_name, "_all_spp_sample_", sample_n, "_post_", REGION_IN_Q, ".rdata", sep = ""))
+    }
+    return(samp_post)
   }
 }
 

@@ -11,6 +11,8 @@
 #' @param output_path The location where the output will be saved.
 #' @param group_name The name of the species group we are running, used for
 #'  	  naming output files.
+#'
+#' @param write Logical. If TRUE writes output to output_path. 
 #'  	  
 #' @return An .rdata file containing the inputted posterior samples combined into
 #'         a single dataframe.
@@ -20,7 +22,8 @@
 
 SampBind <- function(indata = "../data/model_runs/", innames = NULL,
                      output_path = "../data/bound_samples/",
-                     group_name = ""){
+                     group_name = "",
+                     write){
   
   # get the input list
   inputs.list <- list.files(indata, pattern = "*.rdata")
@@ -57,6 +60,10 @@ SampBind <- function(indata = "../data/model_runs/", innames = NULL,
   
   stacked_samps <- templatedf
   
-  save(stacked_samps, file = paste0(output_path, group_name, "stacked", ".rdata"))
+  if (write == TRUE) {
+    save(stacked_samps, file = paste0(output_path, group_name, "stacked", ".rdata"))
+  }
+  
+  return(stacked_samps)
   
 }
