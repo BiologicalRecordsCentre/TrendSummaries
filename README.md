@@ -17,7 +17,7 @@ Use the `devtools` package to **install**.
 library(devtools)
 
 # Install TrendSummaries
-install_github('GPowney/TrendSummaries')
+install_github('BiologicalRecordsCentre/TrendSummaries')
 
 # Load TrendSummaries
 library(TrendSummaries)
