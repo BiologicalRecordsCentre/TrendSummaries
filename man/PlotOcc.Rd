@@ -9,6 +9,7 @@ PlotOcc(
   output_path = "../output/",
   REGION_IN_Q = "^psi.fs\\\\[",
   y_axis_choice = "variable",
+  naming_file = "no",
   cluster_run = "jasmin",
   jasmin_min_year = 1970
 )
@@ -25,6 +26,10 @@ UK based occupancy model examples include,
 \item{y_axis_choice}{Two choices here, "variable" or "fixed". Fixed, fixes the 
 y axis limits between 0 and 1. Variable sets the y axis limits equal to the 
 maximum and minimum plotted values.}
+
+\item{naming_file}{This is a UK/BRC specific additon to add a file for matching concept
+codes to species names. Two option here "yes" or "no". if "yes" a custom naming
+file (called "spmod.csv") should be added to the '../data/' location.}
 
 \item{cluster_run}{This is a UK specific parameter. "Jasmin" is used for outputs
 from Jasmin occupancy model runs.  "Cirrus" is used for standard .rdata occupancy 
