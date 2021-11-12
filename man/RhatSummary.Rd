@@ -4,9 +4,12 @@
 \alias{RhatSummary}
 \title{RhatSummary - Rhat Summary function}
 \usage{
-RhatSummary(indata = "../data/model_runs/",
-  output_path = "../rhat_summary/", REGION_IN_Q = "psi.fs",
-  group_run = "article_17")
+RhatSummary(
+  indata = "../data/model_runs/",
+  output_path = "../rhat_summary/",
+  REGION_IN_Q = "psi.fs",
+  group_run = "article_17"
+)
 }
 \arguments{
 \item{indata}{The file path to a location containing .rdata files

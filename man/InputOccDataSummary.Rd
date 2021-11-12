@@ -4,10 +4,15 @@
 \alias{InputOccDataSummary}
 \title{InputOccDataSummary}
 \usage{
-InputOccDataSummary(indata = "data/model_runs/",
-  output_path = "output/", minNyear = 2, minNrecs = 50,
-  save_name = "cirrus", outhwaite_spp_clean = TRUE,
-  species_year_summary = TRUE)
+InputOccDataSummary(
+  indata = "data/model_runs/",
+  output_path = "output/",
+  minNyear = 2,
+  minNrecs = 50,
+  save_name = "cirrus",
+  outhwaite_spp_clean = TRUE,
+  species_year_summary = TRUE
+)
 }
 \arguments{
 \item{indata}{The file path to a folder contain .rdata output files 

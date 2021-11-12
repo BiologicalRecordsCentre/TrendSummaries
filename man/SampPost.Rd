@@ -4,11 +4,17 @@
 \alias{SampPost}
 \title{SampPost - Sample posterior function}
 \usage{
-SampPost(indata = "../data/model_runs/",
+SampPost(
+  indata = "../data/model_runs/",
   output_path = "../data/sampled_posterior_1000/",
-  REGION_IN_Q = "psi.fs", sample_n = 1000, group_name = "",
-  combined_output = TRUE, max_year_model = NULL,
-  min_year_model = NULL)
+  REGION_IN_Q = "psi.fs",
+  sample_n = 1000,
+  group_name = "",
+  combined_output = TRUE,
+  max_year_model = NULL,
+  min_year_model = NULL,
+  write = FALSE
+)
 }
 \arguments{
 \item{indata}{The file path to a location containing .rdata files
@@ -42,6 +48,9 @@ in the posterior. If this is available in the metadata (models
 run using sparta >= 0.2.06) then it will be added automatically.
  If this is not available then any input value for this argument
  will be used or this will default to NULL.}
+
+\item{write}{Boolean. If write = TRUE and combine_outputs = TRUE then then the .rdata 
+files are written to output_path.}
 }
 \value{
 A .csv file for each species containing annual occupancy 

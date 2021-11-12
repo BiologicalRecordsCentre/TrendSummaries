@@ -4,11 +4,16 @@
 \alias{SppTrendSummary}
 \title{SppTrendSummary - Species trend summary}
 \usage{
-SppTrendSummary(indata = "../data/sampled_posterior_1000/",
-  output_path = "../trend_summary/", short_term_length = 10,
-  a_17 = "no", include_rhat_check = "yes",
-  include_prec_check = "yes", REGION_IN_Q = "psi.fs",
-  model_useable_columns = "yes")
+SppTrendSummary(
+  indata = "../data/sampled_posterior_1000/",
+  output_path = "../trend_summary/",
+  short_term_length = 10,
+  a_17 = "no",
+  include_rhat_check = "yes",
+  include_prec_check = "yes",
+  REGION_IN_Q = "psi.fs",
+  model_useable_columns = "yes"
+)
 }
 \arguments{
 \item{indata}{The file path to an selection of .csv files (one per species)

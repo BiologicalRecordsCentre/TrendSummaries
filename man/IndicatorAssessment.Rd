@@ -4,10 +4,13 @@
 \alias{IndicatorAssessment}
 \title{IndicatorAssessment - Assess the composite trend (indicator)}
 \usage{
-
-  IndicatorAssessment(indata = "../outputs/pollinators_2016_arithmetic_logit_occ_composite_trend_iterations.csv",
-  output_path = "../outputs/", group_name = "pollinators_2016",
-  st_length = 5)
+IndicatorAssessment(
+ 
+    indata = "../outputs/pollinators_2016_arithmetic_logit_occ_composite_trend_iterations.csv",
+  output_path = "../outputs/",
+  group_name = "pollinators_2016",
+  st_length = 5
+)
 }
 \arguments{
 \item{indata}{A .csv file containing mean trend (indicator index value) 

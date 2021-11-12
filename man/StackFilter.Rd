@@ -4,10 +4,22 @@
 \alias{StackFilter}
 \title{StackFilter - clip and filter stacked estimates produced by SampBind}
 \usage{
-StackFilter(indata, output_path, group_name, metadata, region = NULL,
-  minObs = NULL, maxStartGap = NULL, maxEndGap = NULL,
-  maxMiddleGap = NULL, keepSpecies = NULL, removeSpecies = NULL,
-  ClipFirst = FALSE, ClipLast = FALSE)
+StackFilter(
+  input = "memory",
+  indata,
+  output_path,
+  group_name,
+  metadata,
+  region = NULL,
+  minObs = NULL,
+  maxStartGap = NULL,
+  maxEndGap = NULL,
+  maxMiddleGap = NULL,
+  keepSpecies = NULL,
+  removeSpecies = NULL,
+  ClipFirst = FALSE,
+  ClipLast = FALSE
+)
 }
 \arguments{
 \item{indata}{The file path to the .rdata file produced using \code{SampBind()}.}

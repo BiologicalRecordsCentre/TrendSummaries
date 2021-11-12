@@ -4,8 +4,13 @@
 \alias{SampBind}
 \title{SampBind - Combine the multiple outputs from SampPost}
 \usage{
-SampBind(indata = "../data/model_runs/", innames = NULL,
-  output_path = "../data/bound_samples/", group_name = "")
+SampBind(
+  indata = "../data/model_runs/",
+  innames = NULL,
+  output_path = "../data/bound_samples/",
+  group_name = "",
+  write
+)
 }
 \arguments{
 \item{indata}{The file path to a location containing .rdata files
@@ -18,6 +23,8 @@ not supplied then all .rdata files in the specified folder will be used.}
 
 \item{group_name}{The name of the species group we are running, used for
 naming output files.}
+
+\item{write}{Logical. If TRUE writes output to output_path.}
 }
 \value{
 An .rdata file containing the inputted posterior samples combined into

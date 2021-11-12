@@ -4,9 +4,14 @@
 \alias{PlotOcc}
 \title{PlotOcc - Produce time-series plots of annual occupancy estimates}
 \usage{
-PlotOcc(indata = "../data/model_runs/", output_path = "../output/",
-  REGION_IN_Q = "^psi.fs\\\\[", y_axis_choice = "variable",
-  cluster_run = "jasmin", jasmin_min_year = 1970)
+PlotOcc(
+  indata = "../data/model_runs/",
+  output_path = "../output/",
+  REGION_IN_Q = "^psi.fs\\\\[",
+  y_axis_choice = "variable",
+  cluster_run = "jasmin",
+  jasmin_min_year = 1970
+)
 }
 \arguments{
 \item{indata}{The folder containing the species-level occupancy model outputs}
