@@ -12,6 +12,9 @@
 #' @param y_axis_choice Two choices here, "variable" or "fixed". Fixed, fixes the 
 #'      y axis limits between 0 and 1. Variable sets the y axis limits equal to the 
 #'      maximum and minimum plotted values.
+#' @param naming_file This is a UK/BRC specific additon to add a file for matching concept
+#'      codes to species names. Two option here "yes" or "no". if "yes" a custom naming
+#'      file (called "spmod.csv") should be added to the '../data/' location.
 #' @param cluster_run This is a UK specific parameter. "Jasmin" is used for outputs
 #'      from Jasmin occupancy model runs.  "Cirrus" is used for standard .rdata occupancy 
 #'      model outputs, such as those from the occDetFunc function from the R package Sparta.     
@@ -25,6 +28,7 @@ PlotOcc <- function(indata = "../data/model_runs/",
                     output_path = "../output/", 
                     REGION_IN_Q = "^psi.fs\\[", 
                     y_axis_choice = "variable",
+                    naming_file = "no",
                     cluster_run = "jasmin",
                     jasmin_min_year = 1970){
   
@@ -35,8 +39,10 @@ PlotOcc <- function(indata = "../data/model_runs/",
     region_run <- REGION_IN_Q
   }
   
-  # load a name matching file 
-  name_match <- read.csv("../data/spmod.csv", header = TRUE)
+  # load a name matching file
+  if(naming_file == "yes"){
+    name_match <- read.csv("../data/spmod.csv", header = TRUE)
+  }
   
   ### set up species list we want to loop though ###
   spp.list <- list.files(indata) # species for which we have models
@@ -69,7 +75,9 @@ PlotOcc <- function(indata = "../data/model_runs/",
       spp_name <- substr(spp_name, 1, (regexpr("_it",spp_name)[1]-1))
     }
     
-    spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
+    if(naming_file == "yes"){
+      spp_name <- as.character(name_match[name_match$NAME_USED == spp_name, "SPECIES_NAME"])
+    }
     
     if (cluster_run == "cirrus"){
       out <- NULL
